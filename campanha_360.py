@@ -87,7 +87,7 @@ PADRAO = {
     "briefing": {}, "estrategia": "", "funil": "",
     "posts": [], "mensagens": [], "contatos": [],
     "marca_cor1": "#16A34A", "marca_cor2": "#0F172A", "marca_logo": "", "fotos": [],
-    "proxima_msg": {}, "analise_final": "",
+    "proxima_msg": {}, "analise_final": "", "ver": 0,
 }
 for _k, _v in PADRAO.items():
     if _k not in st.session_state:
@@ -1015,13 +1015,22 @@ a IA escreve o próximo passo para aquele grupo. Gostou? Clique em **➕ Adicion
     ("💾 Como salvar e continuar outro dia (IMPORTANTE)", """
 O app **não guarda nada sozinho**: se você fechar a página ou ficar muito tempo parado, **perde o que fez**.
 Por isso, sempre que terminar (ou fizer uma parte grande):
-1. Abra **💾 Projeto: salvar, abrir ou sair** (no topo, à direita).
+1. Abra **💾 Projeto: salvar, abrir, nova campanha ou sair** (no topo, à direita).
 2. Clique em **💾 Salvar projeto (.json)** — o arquivo vai para a pasta *Downloads*.
 
 **Para continuar depois:** entre de novo com sua chave, abra **💾 Projeto**, clique em **📂 Abrir projeto salvo**,
 escolha o arquivo .json e clique em **Carregar este projeto**. Tudo volta: textos, posts, mensagens e contatos.
 
 💡 Dá para ter **um arquivo por campanha ou por cliente**. Dê nomes fáceis, ex.: *campanha_natal_docesabor.json*.
+"""),
+    ("🆕 Como começar uma campanha nova (outro produto ou outro cliente)", """
+1. **Salve a campanha atual** primeiro: **💾 Projeto → 💾 Salvar projeto (.json)**.
+2. No mesmo painel, clique em **🆕 Começar campanha nova** e confirme em **✅ Sim, nova campanha**.
+3. Tudo fica em branco (briefing, posts, mensagens, contatos, fotos e cores). Sua chave continua — não precisa entrar de novo.
+4. Comece pela aba **1️⃣ Briefing**.
+
+**Quer usar uma campanha antiga como base?** Abra o projeto antigo (**📂 Abrir projeto salvo**), mude o que precisar
+no briefing e gere de novo só as partes que quiser. Depois **salve com outro nome** para não misturar.
 """),
     ("🛡️ Regras de ouro para não ter o WhatsApp bloqueado", """
 - Envie **só para quem conhece você** ou pediu informação. Nunca compre listas de números.
@@ -1131,11 +1140,11 @@ with c_cab:
     st.markdown(f"""<div class="cab"><h1>🚀 Campanha 360 IA</h1>
     <p>Olá, {S.c_nome_user}! Montando: <b>{nome_neg}</b></p></div>""", unsafe_allow_html=True)
 with c_proj:
-    with st.expander("💾 Projeto: salvar, abrir ou sair", expanded=False):
+    with st.expander("💾 Projeto: salvar, abrir, nova campanha ou sair", expanded=False):
         st.download_button("💾 Salvar projeto (.json)", data=projeto_json(),
                            file_name=f"campanha_{re.sub(r'[^a-z0-9]+', '_', nome_neg.lower())[:30]}.json",
                            mime="application/json", width="stretch")
-        arq = st.file_uploader("📂 Abrir projeto salvo", type=["json"], key="c_upload_proj")
+        arq = st.file_uploader("📂 Abrir projeto salvo", type=["json"], key=f"c_upload_proj_{S.ver}")
         if arq is not None and st.button("Carregar este projeto", width="stretch"):
             try:
                 dados = json.loads(arq.getvalue().decode("utf-8"))
@@ -1143,15 +1152,35 @@ with c_proj:
                           "marca_cor1", "marca_cor2", "marca_logo", "fotos", "analise_final"]:
                     if k in dados:
                         S[k] = dados[k]
+                S.proxima_msg = {}
+                S.ver += 1
                 st.success("Projeto carregado!")
                 st.rerun()
             except Exception:
                 st.error("Esse arquivo não é um projeto válido da Campanha 360.")
-        if st.button("🧹 Começar campanha nova", width="stretch"):
-            for k, v in PADRAO.items():
-                if k not in ("c_nome_user", "c_chave"):
-                    S[k] = v.copy() if isinstance(v, (dict, list)) else v
-            st.rerun()
+        st.divider()
+        if not S.get("_confirma_nova"):
+            if st.button("🆕 Começar campanha nova", width="stretch", type="primary"):
+                S["_confirma_nova"] = True
+                st.rerun()
+        else:
+            st.warning("A campanha atual será apagada da tela. **Salve o projeto antes** se quiser guardar "
+                       "(botão 💾 acima). Continuar?")
+            n1, n2 = st.columns(2)
+            with n1:
+                if st.button("✅ Sim, nova campanha", width="stretch", key="b_nova_sim"):
+                    ver = S.ver
+                    for k, v in PADRAO.items():
+                        if k not in ("c_nome_user", "c_chave"):
+                            S[k] = v.copy() if isinstance(v, (dict, list)) else v
+                    S.ver = ver + 1
+                    S["_confirma_nova"] = False
+                    st.rerun()
+            with n2:
+                if st.button("✖ Cancelar", width="stretch", key="b_nova_nao"):
+                    S["_confirma_nova"] = False
+                    st.rerun()
+        st.divider()
         if st.button("🚪 Sair", width="stretch"):
             for k in list(S.keys()):
                 del S[k]
@@ -1216,7 +1245,7 @@ with abas[0]:
     with k2:
         S.marca_cor2 = st.color_picker("Cor de apoio (escura)", S.marca_cor2)
     with k3:
-        logo = st.file_uploader("Logo (PNG, opcional)", type=["png", "jpg", "jpeg"], key="c_logo")
+        logo = st.file_uploader("Logo (PNG, opcional)", type=["png", "jpg", "jpeg"], key=f"c_logo_{S.ver}")
         if logo is not None:
             S.marca_logo = base64.b64encode(logo.getvalue()).decode()
         if S.marca_logo:
@@ -1247,12 +1276,13 @@ Formato (use títulos com ## e listas):
 ## 📊 Metas e indicadores (o que medir e uma meta realista para cada)""")
             if res:
                 S.estrategia = res
+                S.ver += 1
         if S.estrategia:
             st.markdown(f'<div class="card">', unsafe_allow_html=True)
             st.markdown(S.estrategia)
             st.markdown("</div>", unsafe_allow_html=True)
             with st.expander("✏️ Editar texto da estratégia"):
-                novo = st.text_area("Estratégia", S.estrategia, height=300, key="ed_estr", label_visibility="collapsed")
+                novo = st.text_area("Estratégia", S.estrategia, height=300, key=f"ed_estr_{S.ver}", label_visibility="collapsed")
                 if st.button("Salvar edição", key="sv_estr"):
                     S.estrategia = novo
                     st.rerun()
@@ -1281,10 +1311,11 @@ Formato (títulos com ##):
 ## 📈 Números para acompanhar em cada etapa""")
             if res:
                 S.funil = res
+                S.ver += 1
         if S.funil:
             st.markdown(S.funil)
             with st.expander("✏️ Editar texto do funil"):
-                novo = st.text_area("Funil", S.funil, height=300, key="ed_funil", label_visibility="collapsed")
+                novo = st.text_area("Funil", S.funil, height=300, key=f"ed_funil_{S.ver}", label_visibility="collapsed")
                 if st.button("Salvar edição", key="sv_funil"):
                     S.funil = novo
                     st.rerun()
@@ -1303,7 +1334,7 @@ with abas[3]:
             st.caption("Envie de 1 a 6 fotos do seu produto, loja ou serviço. Os modelos **Foto destaque**, "
                        "**Foto + painel** e **Elegante** usam essas fotos. Dica: fotos bem iluminadas, na vertical ou quadradas.")
             novas = st.file_uploader("Fotos", type=["jpg", "jpeg", "png", "webp"], accept_multiple_files=True,
-                                     key="c_fotos", label_visibility="collapsed")
+                                     key=f"c_fotos_{S.ver}", label_visibility="collapsed")
             f1, f2 = st.columns(2)
             with f1:
                 if novas and st.button("➕ Usar estas fotos", key="b_add_fotos", width="stretch"):
@@ -1356,6 +1387,7 @@ Responda SOMENTE em JSON neste formato:
 "hashtags":"8 a 12 hashtags relevantes"}}]}}""")
             if dados and isinstance(dados.get("posts"), list):
                 S.posts = [p for p in dados["posts"] if isinstance(p, dict)][:qtd]
+                S.ver += 1
                 st.success(f"✅ {len(S.posts)} posts criados!")
 
         if S.posts:
@@ -1383,7 +1415,7 @@ Responda SOMENTE em JSON neste formato:
                         with m1:
                             atual = modelo_do_post(i, p, modelo_arte)
                             escolhido = st.selectbox("Modelo desta arte", MODELOS_ARTE,
-                                                     index=MODELOS_ARTE.index(atual), key=f"pm_{i}")
+                                                     index=MODELOS_ARTE.index(atual), key=f"pm_{S.ver}_{i}")
                             if escolhido != atual:
                                 p["modelo"] = escolhido
                                 st.rerun()
@@ -1391,23 +1423,23 @@ Responda SOMENTE em JSON neste formato:
                             idx_atual = p.get("foto_idx")
                             pos = 0 if idx_atual is None else (len(opcoes_foto) - 1 if idx_atual == -1 else idx_atual + 1)
                             pos = min(pos, len(opcoes_foto) - 1)
-                            esc_f = st.selectbox("Foto", opcoes_foto, index=pos, key=f"pf_{i}",
+                            esc_f = st.selectbox("Foto", opcoes_foto, index=pos, key=f"pf_{S.ver}_{i}",
                                                  disabled=not S.fotos, help="Envie fotos no topo desta aba.")
                             novo_idx = None if esc_f == "Automática" else (-1 if esc_f == "Sem foto" else opcoes_foto.index(esc_f) - 1)
                             if novo_idx != idx_atual and S.fotos:
                                 p["foto_idx"] = novo_idx
                                 st.rerun()
-                        p["titulo_arte"] = st.text_input("Texto da arte", p.get("titulo_arte", ""), key=f"pt_{i}")
-                        p["subtitulo"] = st.text_input("Subtítulo", p.get("subtitulo", ""), key=f"ps_{i}")
+                        p["titulo_arte"] = st.text_input("Texto da arte", p.get("titulo_arte", ""), key=f"pt_{S.ver}_{i}")
+                        p["subtitulo"] = st.text_input("Subtítulo", p.get("subtitulo", ""), key=f"ps_{S.ver}_{i}")
                         c_a, c_b, c_c = st.columns(3)
                         with c_a:
-                            p["selo"] = st.text_input("Selo (ex.: -20%)", p.get("selo", ""), key=f"psl_{i}")
+                            p["selo"] = st.text_input("Selo (ex.: -20%)", p.get("selo", ""), key=f"psl_{S.ver}_{i}")
                         with c_b:
-                            p["etiqueta"] = st.text_input("Etiqueta do topo", p.get("etiqueta", ""), key=f"pe_{i}")
+                            p["etiqueta"] = st.text_input("Etiqueta do topo", p.get("etiqueta", ""), key=f"pe_{S.ver}_{i}")
                         with c_c:
-                            p["cta"] = st.text_input("Chamada do botão", p.get("cta", ""), key=f"pc_{i}")
-                        p["legenda"] = st.text_area("Legenda", p.get("legenda", ""), height=130, key=f"pl_{i}")
-                        p["hashtags"] = st.text_input("Hashtags", p.get("hashtags", ""), key=f"ph_{i}")
+                            p["cta"] = st.text_input("Chamada do botão", p.get("cta", ""), key=f"pc_{S.ver}_{i}")
+                        p["legenda"] = st.text_area("Legenda", p.get("legenda", ""), height=130, key=f"pl_{S.ver}_{i}")
+                        p["hashtags"] = st.text_input("Hashtags", p.get("hashtags", ""), key=f"ph_{S.ver}_{i}")
                         st.caption("Edite qualquer campo e a arte se atualiza sozinha. Deixe o selo vazio para não mostrar.")
 
 
@@ -1445,6 +1477,7 @@ primeiro nome do contato e {{link}} onde entrar o link. Nada de CAIXA ALTA exage
 Responda SOMENTE em JSON: {{"mensagens":[{{"etapa":"...","quando":"ex: Dia 1 de manhã","texto":"..."}}]}}""")
             if dados and isinstance(dados.get("mensagens"), list):
                 S.mensagens = [m for m in dados["mensagens"] if isinstance(m, dict)]
+                S.ver += 1
                 if sair:
                     for m in S.mensagens:
                         if "SAIR" not in m.get("texto", ""):
@@ -1454,15 +1487,15 @@ Responda SOMENTE em JSON: {{"mensagens":[{{"etapa":"...","quando":"ex: Dia 1 de 
         if S.mensagens:
             for i, m in enumerate(S.mensagens):
                 with st.expander(f"{i + 1}. {m.get('etapa', '')} — {m.get('quando', '')}"):
-                    m["texto"] = st.text_area("Mensagem", m.get("texto", ""), height=140, key=f"mt_{i}")
+                    m["texto"] = st.text_area("Mensagem", m.get("texto", ""), height=140, key=f"mt_{S.ver}_{i}")
 
         # ── contatos
         st.markdown("#### 👥 Lista de contatos")
         with st.expander("➕ Adicionar contatos (colar lista ou subir planilha)", expanded=not S.contatos):
             st.caption("Uma pessoa por linha, no formato **Nome, Telefone** (com DDD). Ex.: `Maria Souza, 11 98888-7777`")
-            colado = st.text_area("Colar lista", height=120, key="c_colar", label_visibility="collapsed",
+            colado = st.text_area("Colar lista", height=120, key=f"c_colar_{S.ver}", label_visibility="collapsed",
                                   placeholder="Maria Souza, 11 98888-7777\nJoão Lima, (21) 97777-6666")
-            planilha = st.file_uploader("…ou subir CSV/Excel com colunas Nome e Telefone", type=["csv", "xlsx"], key="c_planilha")
+            planilha = st.file_uploader("…ou subir CSV/Excel com colunas Nome e Telefone", type=["csv", "xlsx"], key=f"c_planilha_{S.ver}")
             if st.button("Adicionar à lista", key="b_add_cont"):
                 novos = []
                 for linha in (colado or "").splitlines():
@@ -1557,7 +1590,7 @@ Responda SOMENTE em JSON: {{"mensagens":[{{"etapa":"...","quando":"ex: Dia 1 de 
         with l1:
             meu_num = st.text_input("Seu WhatsApp (com DDD)", key="c_meu_num", placeholder="11 98888-7777")
         with l2:
-            frase = st.text_input("Mensagem que a pessoa vai enviar", key="c_frase",
+            frase = st.text_input("Mensagem que a pessoa vai enviar", key=f"c_frase_{S.ver}",
                                   value=f"Olá! Vi a campanha e quero saber mais sobre {S.briefing.get('produto', '')[:60]}")
         if meu_num:
             st.code(link_wa(meu_num, frase), language=None)
