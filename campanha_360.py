@@ -539,6 +539,184 @@ def projeto_json() -> bytes:
 
 
 # ══════════════════════════════════════════════════════════════════════════
+# GUIA PARA INICIANTES (aparece no rodapé — inclusive na tela de entrada)
+# ══════════════════════════════════════════════════════════════════════════
+GUIA = [
+    ("🧰 O que você precisa antes de começar", """
+- **Um computador ou celular com internet.** No computador a experiência é mais confortável.
+- **Uma chave Groq** (é grátis — veja o próximo item). É ela que faz a inteligência artificial funcionar.
+- **WhatsApp instalado** no celular, ou o **WhatsApp Web** aberto no computador (web.whatsapp.com).
+- **Uma lista de contatos que autorizaram receber suas mensagens** (clientes, pessoas que pediram informação).
+- **Uns 20 minutos** para montar a primeira campanha do começo ao fim.
+"""),
+    ("🔑 Como criar sua chave Groq (grátis, 2 minutos)", """
+1. Acesse **console.groq.com/keys** (no computador ou no celular).
+2. Clique em **Sign in / Login** e entre com sua conta Google (é o jeito mais fácil).
+3. Clique no botão **Create API Key**.
+4. Dê um nome qualquer (ex.: *campanha*) e confirme.
+5. Vai aparecer um código que começa com **gsk_**. Clique em **Copy** para copiar.
+6. Volte aqui, cole no campo **Sua chave Groq API** e clique em **ENTRAR**.
+
+⚠️ **Guarde a chave num lugar seguro** (bloco de notas, por exemplo). O site da Groq só mostra o código completo uma vez.
+Se perder, é só criar outra. **Não compartilhe sua chave com ninguém.**
+"""),
+    ("1️⃣ Aba Briefing — conte o que você vende", """
+É a parte **mais importante**: tudo o que a IA cria depois sai daqui. Quanto mais detalhes, melhor o resultado.
+- **Produto ou serviço** e **Público-alvo** são obrigatórios (têm *).
+- Em **Público-alvo**, descreva quem compra: idade, profissão, o que essa pessoa quer, onde mora.
+  Ex.: *“Mães de 28 a 40 anos, que trabalham fora e querem praticidade no lanche dos filhos”*.
+- Em **Diferencial**, diga por que comprar de você e não do concorrente.
+- **Oferta ou bônus**: uma vantagem com prazo (frete grátis, brinde, desconto) aumenta muito as vendas.
+- **Link de compra ou contato**: seu Instagram, site ou link do WhatsApp. Ele entra automaticamente nas mensagens.
+- Clique em **💾 Salvar briefing**.
+- Embaixo, escolha as **cores da sua marca** e, se tiver, envie a **logo** (de preferência PNG com fundo transparente).
+"""),
+    ("2️⃣ Aba Estratégia — o plano da campanha", """
+Clique em **🧠 Gerar estratégia completa** e espere alguns segundos.
+Você recebe: o perfil do seu cliente ideal, 3 frases de impacto, as dúvidas que impedem a compra (e como responder),
+o calendário dia a dia e as metas.
+- Leia com calma: é o seu **roteiro**. Se algo não combinar com o seu negócio, abra **✏️ Editar texto** e ajuste.
+- Partes marcadas como **[AJUSTAR]** são informações que você não preencheu — troque pelo dado real.
+"""),
+    ("3️⃣ Aba Funil — o caminho até a venda", """
+O funil é o caminho que a pessoa faz: **conhece você → se interessa → compra → volta a comprar**.
+Clique em **🔻 Montar funil completo**. Você recebe:
+- **Topo:** ideias de conteúdo para atrair gente nova.
+- **Meio:** uma isca (ex.: e-book, cupom) e o **texto pronto** de uma página de cadastro.
+- **Fundo:** como apresentar a oferta e um roteiro para fechar a venda no WhatsApp.
+- **Pós-venda:** como agradecer, pedir depoimento e vender de novo.
+"""),
+    ("4️⃣ Aba Posts — artes prontas para publicar", """
+1. Escolha **quantos posts** e o **modelo da arte** (Gradiente, Faixa ou Minimal). Teste os três!
+2. Clique em **✨ Criar posts**.
+3. Cada post vem com **arte, legenda e hashtags**. Mude qualquer texto e a arte **se atualiza sozinha**.
+4. Clique em **⬇️ Baixar arte** (um por um) ou em **📦 Baixar todas as artes + legendas (.zip)**.
+
+**Para publicar no Instagram/Facebook:**
+- No computador: abra o arquivo .zip (clique duas vezes ou botão direito → *Extrair tudo*).
+  Você terá as imagens (.png) e as legendas (.txt).
+- Mande as imagens para o seu celular (WhatsApp para você mesmo, e-mail ou Google Drive).
+- No Instagram, toque em **+**, escolha a imagem e **cole a legenda** do arquivo .txt correspondente.
+- Siga o **calendário** da aba Estratégia para saber o que postar em cada dia.
+"""),
+    ("5️⃣ Aba WhatsApp — mensagens e envio", """
+**Passo A — criar as mensagens:** clique em **✨ Criar mensagens**. São 7 mensagens, uma para cada momento da campanha.
+Onde aparecer **{nome}**, o app coloca o primeiro nome de cada contato; **{link}** vira o link do seu briefing.
+
+**Passo B — colocar seus contatos:** abra **➕ Adicionar contatos** e cole um por linha, assim:
+`Maria Souza, 11 98888-7777`
+Sempre com **DDD**. Pode também subir uma planilha **.csv** com as colunas **Nome** e **Telefone**.
+
+**Passo C — enviar:**
+1. Escolha em **Qual mensagem enviar agora?** (comece pela 1, Abertura).
+2. Na tabela, clique em **📲 Abrir WhatsApp** do primeiro contato.
+3. O WhatsApp abre com a conversa e a mensagem **já escrita**. Confira e toque em **enviar**.
+4. Volte para o app e mude o **Status** daquele contato para **Enviado**
+   (clique duas vezes na célula Status e escolha). Ou use **✔️ Marcar todos os 'Novo' visíveis como Enviado** no final.
+5. Repita para o próximo contato.
+
+💡 **No computador**, deixe o **WhatsApp Web** aberto e conectado antes: o link abre direto nele.
+💡 **No celular**, o link abre o aplicativo do WhatsApp; depois de enviar, volte ao navegador.
+
+**Link para bio/anúncios:** no fim da aba, digite **seu** número e copie o link gerado.
+Coloque na bio do Instagram, no status e nos anúncios: quem clicar abre uma conversa com você com a mensagem pronta.
+"""),
+    ("6️⃣ Aba Acompanhamento — quem respondeu e comprou", """
+Sempre que alguém responder, se interessar ou comprar, volte na tabela da aba **5️⃣ WhatsApp** e **atualize o Status**:
+- **Enviado** → você mandou a mensagem.
+- **Respondeu** → a pessoa respondeu.
+- **Interessado** → perguntou preço, pediu detalhes.
+- **Comprou** → fechou! 🎉
+- **Não quer** → pediu para não receber mais. **Respeite e não mande mais nada** (pode apagar com 🗑️).
+
+Na aba **6️⃣ Acompanhamento** você vê os números e a taxa de resposta e de venda.
+Escolha um **grupo** (ex.: *Enviado (não respondeu)*) e clique em **✨ Sugerir próxima mensagem**:
+a IA escreve o próximo passo para aquele grupo. Gostou? Clique em **➕ Adicionar à sequência**.
+"""),
+    ("7️⃣ Aba Relatório — resultado e próximos passos", """
+- Clique em **🧠 Analisar resultados** para a IA ler seus números e sugerir 5 ações para a próxima semana.
+- **📄 Relatório (.txt)**: abre no bloco de notas ou no celular.
+- **📊 Relatório (Excel)**: abre no Excel, Google Planilhas ou LibreOffice — uma aba para cada parte da campanha.
+- **💾 Projeto completo (.json)**: é o arquivo para **continuar a campanha outro dia** (veja abaixo).
+"""),
+    ("💾 Como salvar e continuar outro dia (IMPORTANTE)", """
+O app **não guarda nada sozinho**: se você fechar a página ou ficar muito tempo parado, **perde o que fez**.
+Por isso, sempre que terminar (ou fizer uma parte grande):
+1. Abra **💾 Projeto: salvar, abrir ou sair** (no topo, à direita).
+2. Clique em **💾 Salvar projeto (.json)** — o arquivo vai para a pasta *Downloads*.
+
+**Para continuar depois:** entre de novo com sua chave, abra **💾 Projeto**, clique em **📂 Abrir projeto salvo**,
+escolha o arquivo .json e clique em **Carregar este projeto**. Tudo volta: textos, posts, mensagens e contatos.
+
+💡 Dá para ter **um arquivo por campanha ou por cliente**. Dê nomes fáceis, ex.: *campanha_natal_docesabor.json*.
+"""),
+    ("🛡️ Regras de ouro para não ter o WhatsApp bloqueado", """
+- Envie **só para quem conhece você** ou pediu informação. Nunca compre listas de números.
+- Comece devagar: **no máximo 20 a 30 mensagens por dia** nos primeiros dias, e aumente aos poucos.
+- **Personalize** (o app já coloca o nome) e evite mandar o mesmo texto idêntico para centenas de pessoas.
+- Mantenha a frase **“responda SAIR”** e **respeite** quem pedir para sair.
+- Se muita gente bloquear ou denunciar seu número, o WhatsApp pode **restringir ou banir** sua conta.
+- Prefira usar o **WhatsApp Business** (é grátis): fica mais profissional e tem respostas rápidas e catálogo.
+"""),
+    ("🗓️ Rotina sugerida para uma campanha de 7 dias", """
+| Dia | O que fazer |
+|---|---|
+| Antes | Briefing → Estratégia → Funil → Posts → Mensagens. **Salve o projeto.** |
+| Dia 1 | Post de atração + mensagem **1 (Abertura)** para os contatos |
+| Dia 2 | Post de conteúdo útil + mensagem **2 (Valor)** |
+| Dia 3 | Post de prova (depoimento/bastidor) + mensagem **3 (Oferta)** |
+| Dia 4 | Responder dúvidas + mensagem **4 (Objeção)** para quem não respondeu |
+| Dia 5 | Post de oferta + atualizar os Status |
+| Dia 6 | Mensagem **5 (Lembrete)** — só para quem demonstrou interesse |
+| Dia 7 | Mensagem **6 (Pós-compra)** para quem comprou · Relatório + análise da IA |
+"""),
+    ("❓ Problemas comuns e como resolver", """
+- **“Sua chave Groq não foi aceita”** → a chave foi copiada errada ou apagada. Crie uma nova em console.groq.com/keys, clique em **Sair** e entre de novo.
+- **“Limite de uso atingido”** → a conta grátis da Groq tem limite por minuto/dia. Espere alguns minutos e tente de novo.
+- **“A IA respondeu fora do formato”** → acontece às vezes. Só clique no botão de novo.
+- **Sumiu tudo!** → a página ficou fechada ou parada muito tempo. Abra o seu **projeto salvo (.json)**. Por isso é importante salvar sempre.
+- **A planilha não foi lida** → no Excel, vá em *Arquivo → Salvar como → CSV* e suba o arquivo .csv.
+- **O link do WhatsApp abriu o número errado** → confira se o telefone tem **DDD** (ex.: 11 98888-7777). Números de outros países: comece com **+** (ex.: +351 912 345 678).
+- **O WhatsApp Web não abre a conversa** → entre em web.whatsapp.com antes e deixe conectado; depois clique no link de novo.
+- **A arte ficou com o texto pequeno** → o texto está longo. Encurte o **Texto da arte** (até 8 palavras) e o **Subtítulo**.
+- **Emojis não aparecem na arte** → é normal: a arte usa só letras para ficar nítida. Os emojis continuam na legenda.
+"""),
+    ("📖 Dicionário rápido (palavras do marketing)", """
+- **Briefing:** resumo do que você vende e para quem.
+- **Persona:** um retrato do seu cliente ideal (idade, rotina, desejos).
+- **Funil de vendas:** as etapas do “não te conheço” até o “comprei e indico”.
+- **Lead:** pessoa interessada que deixou o contato.
+- **Isca digital:** algo grátis que você oferece em troca do contato (e-book, cupom, aula).
+- **CTA (chamada para ação):** o convite do botão — *“Peça agora”*, *“Quero saber mais”*.
+- **Objeção:** o motivo que faz a pessoa hesitar (*“está caro”*, *“não tenho tempo”*).
+- **Taxa de resposta:** de cada 100 mensagens enviadas, quantas pessoas responderam.
+- **Conversão:** de cada 100 contatos, quantos compraram.
+- **Hashtag:** palavra com # que ajuda as pessoas a encontrarem seu post.
+"""),
+]
+
+
+def guia_txt() -> str:
+    linhas = ["=" * 64, "📘 CAMPANHA 360 IA — GUIA COMPLETO PARA INICIANTES", "=" * 64, ""]
+    for titulo, corpo in GUIA:
+        linhas += [titulo.upper(), "-" * 64, limpar_md(corpo).replace("`", ""), ""]
+    linhas.append(f"Mais ferramentas: {SITE}")
+    return "\n".join(linhas)
+
+
+def mostrar_guia():
+    st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("## 📘 Como usar — guia completo para iniciantes")
+        st.caption("Nunca fez campanha? Sem problema. Abra cada item na ordem e siga o passo a passo.")
+        for titulo, corpo in GUIA:
+            with st.expander(titulo):
+                st.markdown(corpo)
+        st.download_button("📥 Baixar este guia (.txt)", data=guia_txt().encode("utf-8"),
+                           file_name="guia_campanha_360.txt", mime="text/plain", key="dl_guia")
+
+
+# ══════════════════════════════════════════════════════════════════════════
 # TELA DE ENTRADA
 # ══════════════════════════════════════════════════════════════════════════
 if not S.c_chave:
@@ -566,6 +744,7 @@ if not S.c_chave:
         💾 Dica: use <b>Salvar projeto</b> para guardar sua campanha e continuar outro dia.<br>
         🤖 Mais agentes em <a href="{SITE}" target="_blank">MeusAgentesIA.com.br</a>.
         </div>""", unsafe_allow_html=True)
+    mostrar_guia()
     st.stop()
 
 
@@ -1032,6 +1211,8 @@ Não invente números além dos informados.""")
                            mime="application/json", width="stretch")
     with st.expander("👀 Ver o relatório em texto"):
         st.text(relatorio_txt())
+
+mostrar_guia()
 
 st.markdown(f'<div class="rodape">Os textos são gerados por IA: revise antes de publicar ou enviar.<br>'
             f'© 2026 <a href="{SITE}" target="_blank" style="color:#9CA3AF;">MeusAgentesIA.com.br</a></div>',
